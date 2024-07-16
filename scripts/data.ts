@@ -67,16 +67,16 @@ interface IceCream {
     name: string;
     description: string;
     price: number;
+    color: string;
 }
 
 const iceCreamFlavours: IceCream[] = [
-    { name: 'Vanille', description: 'Vanillegeschmack', price: 1.2},
-    { name: 'Schokolade', description: 'Schokoladengeschmack', price: 1.2},
-    { name: 'Erdbeere', description: 'Erbeergeschmack', price: 1.2},
-    { name: 'Straciatella', description: 'Straciatellageschmack', price: 1.2},
-    { name: 'Zitrone', description: 'Zitronengeschmack', price: 1.2},
-    { name: 'Pistazie', description: 'Pistaziengeschmack', price: 1.2},
-    { name: 'Mango', description: 'Mangogeschmack', price: 1.2},
-    { name: 'Schlumpf', description: 'Blaues schlumpfiges irgendwas', price: 1.2}
+    { name: 'Vanille', description: 'Vanillegeschmack', price: 1.2, color: '#ffffcc'},
+    { name: 'Schokolade', description: 'Schokoladengeschmack', price: 1.2, color: '#8b4513'},
+    { name: 'Erdbeere', description: 'Erbeergeschmack', price: 1.2, color: '#ee6363'},
+    { name: 'Zitrone', description: 'Zitronengeschmack', price: 1.2, color: '#fffaf0'},
+    { name: 'Pistazie', description: 'Pistaziengeschmack', price: 1.2, color: '#8fbc8f'},
+    { name: 'Mango', description: 'Mangogeschmack', price: 1.2, color: '#ffa500'},
+    { name: 'Schlumpf', description: 'Blaues schlumpfiges irgendwas', price: 1.2, color: '#1e90ff'}
 ];
 }

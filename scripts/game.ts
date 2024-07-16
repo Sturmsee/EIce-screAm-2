@@ -1,4 +1,3 @@
-
 namespace Iceshop {
 
 
@@ -14,8 +13,9 @@ var cooldown: number = 500;
 var context: CanvasRenderingContext2D;
 
 
-
-
+////////////////////////////////
+//assigning variables on window load
+////////////////////////////////
 window.onload = () => {
     canvas = <HTMLCanvasElement>document.querySelector('#canvas');
     time = performance.now();
@@ -30,7 +30,9 @@ window.onload = () => {
     
 }
 
-
+////////////////////////////////
+//Cooldown
+////////////////////////////////
 function customerSpawnTimer() {
     if (time - performance.now() > cooldown) {
         
@@ -39,11 +41,17 @@ function customerSpawnTimer() {
     }
 }
 
+////////////////////////////////
+//Function to render Customer
+////////////////////////////////
 function render() {
     let customer: Customer = new Customer(0);
     customer.generateCustomer(context);
 }
 
+////////////////////////////////
+//Game Timer function
+////////////////////////////////
 function msToTime(duration: number) {
     var milliseconds = Math.floor((duration % 1000) / 100),
       seconds = Math.floor((duration / 1000) % 60),
@@ -56,5 +64,11 @@ function msToTime(duration: number) {
   
     return hoursString + ":" + minutesString + ":" + secondsString + "." + milliseconds;
 }
+
+////////////////////////////////
+//Canvas Generator Functions
+////////////////////////////////
+
+
 
 }
