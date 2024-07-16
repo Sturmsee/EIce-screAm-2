@@ -1,9 +1,9 @@
 "use strict";
-var iceshop;
-(function (iceshop) {
+var Iceshop;
+(function (Iceshop) {
     class Customer {
-        constructor(img, mood) {
-            this.img = img;
+        constructor(mood) {
+            //this.img = img;
             this.mood = mood;
         }
         generateOrder() {
@@ -39,6 +39,7 @@ var iceshop;
             cContext.stroke();
         }
     }
+    Iceshop.Customer = Customer;
     class Order {
         constructor(ice1, ice2, ice3) {
             this.ice1 = ice1;
@@ -56,4 +57,4 @@ var iceshop;
         { name: 'Mango', description: 'Mangogeschmack', price: 1.2 },
         { name: 'Schlumpf', description: 'Blaues schlumpfiges irgendwas', price: 1.2 }
     ];
-})(iceshop || (iceshop = {}));
+})(Iceshop || (Iceshop = {}));

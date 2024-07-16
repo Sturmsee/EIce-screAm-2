@@ -1,13 +1,13 @@
-namespace iceshop {
+namespace Iceshop {
 
-class Customer {
+export class Customer {
 
-    img: string;
+    //img: string;
     mood: number;
     customOrder!: Order;
 
-    constructor(img: string, mood: number) {
-        this.img = img;
+    constructor(mood: number) {
+        //this.img = img;
         this.mood = mood;
     }
 
