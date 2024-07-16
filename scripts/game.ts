@@ -10,6 +10,9 @@ var time: number;
 var gameTimer: number;
 var cooldown: number = 500;
 
+var posX: number;
+var posY: number;
+
 var context: CanvasRenderingContext2D;
 
 
@@ -44,9 +47,9 @@ function customerSpawnTimer() {
 ////////////////////////////////
 //Function to render Customer
 ////////////////////////////////
-function render() {
+function renderCustomer() {
     let customer: Customer = new Customer(0);
-    customer.generateCustomer(context);
+    customer.generateCustomer(context, posX, posY);
 }
 
 ////////////////////////////////
@@ -68,7 +71,9 @@ function msToTime(duration: number) {
 ////////////////////////////////
 //Canvas Generator Functions
 ////////////////////////////////
+function renderCafe() {
 
+}
 
 
 }

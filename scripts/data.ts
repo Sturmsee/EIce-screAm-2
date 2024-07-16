@@ -18,10 +18,10 @@ export class Customer {
         return this.customOrder;
     }
 
-    generateCustomer(cContext: CanvasRenderingContext2D){
-        const centerY = 200;
-        const centerX = 200;
-        const radius = 200;
+    generateCustomer(cContext: CanvasRenderingContext2D, animateX: number, animateY: number) {
+        let centerY = 200 + animateY;
+        let centerX = 200 + animateX;
+        let radius = 200;
 
         //Draw Face
         cContext.beginPath();
@@ -43,10 +43,24 @@ export class Customer {
         cContext.fill();
 
         //Draw Mouth
-        cContext.beginPath();
-        cContext.arc(centerX, centerY, 100, 0, Math.PI, false);
-        cContext.lineWidth = 5;
-        cContext.stroke();
+        if(this.mood > 1) {
+            cContext.beginPath();
+            cContext.arc(centerX, centerY, 100, 0, Math.PI, false);
+            cContext.lineWidth = 5;
+            cContext.stroke();
+        }
+        else if(this.mood < 1) {
+            cContext.beginPath();
+            cContext.arc(centerX, centerY - 50, 100, Math.PI, Math.PI * 2, false);
+            cContext.lineWidth = 5;
+            cContext.stroke();
+        }
+        else {
+            cContext.beginPath();
+            cContext.fillRect(centerX - 50, centerY - 50, 100, 20);
+            cContext.lineWidth = 5;
+            cContext.stroke();
+        }
     }
 }
 
