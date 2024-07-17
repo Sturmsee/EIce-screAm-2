@@ -7,17 +7,19 @@ var Iceshop;
     var time;
     var gameTimer;
     var cooldown = 500;
-    var posX;
-    var posY;
+    var posX = 2;
     var context;
     ////////////////////////////////
     //assigning variables on window load
     ////////////////////////////////
     window.onload = () => {
         canvas = document.querySelector('#canvas');
+        context = canvas.getContext('2d');
+        canvas.width = window.innerWidth / 2;
+        canvas.height = window.innerHeight / 2;
+        Iceshop.width = canvas.width;
         time = performance.now();
         gameTimer = performance.now();
-        context = canvas.getContext('2d');
         console.log("loading...");
         timerElement = document.querySelector('#timer');
         //timerElement.innerHTML = msToTime(performance.now() - gameTimer);
@@ -37,7 +39,7 @@ var Iceshop;
     ////////////////////////////////
     function renderCustomer() {
         let customer = new Iceshop.Customer(0);
-        customer.generateCustomer(context, posX, posY);
+        customer.generateCustomer(context, posX);
     }
     ////////////////////////////////
     //Game Timer function
@@ -53,5 +55,11 @@ var Iceshop;
     //Canvas Generator Functions
     ////////////////////////////////
     function renderCafe() {
+    }
+    function spawnCustomer() {
+        let coinFlip = Math.floor(Math.random());
+        if (customerSpawnTimer() && coinFlip > 0) {
+            renderCustomer();
+        }
     }
 })(Iceshop || (Iceshop = {}));

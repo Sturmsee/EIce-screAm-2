@@ -5,6 +5,7 @@ var Iceshop;
         constructor(mood) {
             //this.img = img;
             this.mood = mood;
+            this.orderFinished = false;
         }
         generateOrder() {
             this.customOrder.ice1 = iceCreamFlavours[Math.floor(Math.random() * iceCreamFlavours.length)];
@@ -12,8 +13,9 @@ var Iceshop;
             this.customOrder.ice3 = iceCreamFlavours[Math.floor(Math.random() * iceCreamFlavours.length)];
             return this.customOrder;
         }
-        generateCustomer(cContext, animateX, animateY) {
-            let centerY = 200 + animateY;
+        generateCustomer(cContext, _animateX) {
+            let animateX = _animateX;
+            let centerY = 200;
             let centerX = 200 + animateX;
             let radius = 200;
             //Draw Face
@@ -50,6 +52,12 @@ var Iceshop;
                 cContext.fillRect(centerX - 50, centerY - 50, 100, 20);
                 cContext.lineWidth = 5;
                 cContext.stroke();
+            }
+            if ((centerX >= Iceshop.width / 2) && !this.orderFinished) {
+                animateX = 0;
+            }
+            else {
+                animateX = _animateX;
             }
         }
     }

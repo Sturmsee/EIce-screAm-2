@@ -5,10 +5,12 @@ export class Customer {
     //img: string;
     mood: number;
     customOrder!: Order;
+    orderFinished: boolean;
 
     constructor(mood: number) {
         //this.img = img;
         this.mood = mood;
+        this.orderFinished = false;
     }
 
     generateOrder(){
@@ -18,8 +20,9 @@ export class Customer {
         return this.customOrder;
     }
 
-    generateCustomer(cContext: CanvasRenderingContext2D, animateX: number, animateY: number) {
-        let centerY = 200 + animateY;
+    generateCustomer(cContext: CanvasRenderingContext2D, _animateX: number) {
+        let animateX = _animateX;
+        let centerY = 200;
         let centerX = 200 + animateX;
         let radius = 200;
 
@@ -60,6 +63,12 @@ export class Customer {
             cContext.fillRect(centerX - 50, centerY - 50, 100, 20);
             cContext.lineWidth = 5;
             cContext.stroke();
+        }
+
+        if((centerX >= width / 2) && !this.orderFinished) {
+            animateX = 0;
+        } else {
+            animateX = _animateX;
         }
     }
 }

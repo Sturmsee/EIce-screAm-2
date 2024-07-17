@@ -10,8 +10,8 @@ var time: number;
 var gameTimer: number;
 var cooldown: number = 500;
 
-var posX: number;
-var posY: number;
+var posX: number = 2;
+export var width: number;
 
 var context: CanvasRenderingContext2D;
 
@@ -21,9 +21,16 @@ var context: CanvasRenderingContext2D;
 ////////////////////////////////
 window.onload = () => {
     canvas = <HTMLCanvasElement>document.querySelector('#canvas');
+    context = <CanvasRenderingContext2D>canvas.getContext('2d');
+
+    canvas.width = window.innerWidth / 2;
+    canvas.height = window.innerHeight / 2;
+    width = canvas.width;
+
     time = performance.now();
     gameTimer = performance.now();
-    context = <CanvasRenderingContext2D>canvas.getContext('2d');
+    
+
 
     console.log("loading...");
 
@@ -49,7 +56,7 @@ function customerSpawnTimer() {
 ////////////////////////////////
 function renderCustomer() {
     let customer: Customer = new Customer(0);
-    customer.generateCustomer(context, posX, posY);
+    customer.generateCustomer(context, posX);
 }
 
 ////////////////////////////////
@@ -75,5 +82,12 @@ function renderCafe() {
 
 }
 
+function spawnCustomer() {
+    let coinFlip = Math.floor(Math.random());
+    if(customerSpawnTimer() && coinFlip > 0) { 
+       renderCustomer(); 
+    }
+
+}
 
 }
