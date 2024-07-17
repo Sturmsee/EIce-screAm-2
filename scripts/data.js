@@ -12,10 +12,10 @@ var Iceshop;
             this.customOrder.ice3 = iceCreamFlavours[Math.floor(Math.random() * iceCreamFlavours.length)];
             return this.customOrder;
         }
-        generateCustomer(cContext) {
-            const centerY = 200;
-            const centerX = 200;
-            const radius = 200;
+        generateCustomer(cContext, animateX, animateY) {
+            let centerY = 200 + animateY;
+            let centerX = 200 + animateX;
+            let radius = 200;
             //Draw Face
             cContext.beginPath();
             cContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
@@ -33,10 +33,24 @@ var Iceshop;
             cContext.fillStyle = "black";
             cContext.fill();
             //Draw Mouth
-            cContext.beginPath();
-            cContext.arc(centerX, centerY, 100, 0, Math.PI, false);
-            cContext.lineWidth = 5;
-            cContext.stroke();
+            if (this.mood > 1) {
+                cContext.beginPath();
+                cContext.arc(centerX, centerY, 100, 0, Math.PI, false);
+                cContext.lineWidth = 5;
+                cContext.stroke();
+            }
+            else if (this.mood < 1) {
+                cContext.beginPath();
+                cContext.arc(centerX, centerY - 50, 100, Math.PI, Math.PI * 2, false);
+                cContext.lineWidth = 5;
+                cContext.stroke();
+            }
+            else {
+                cContext.beginPath();
+                cContext.fillRect(centerX - 50, centerY - 50, 100, 20);
+                cContext.lineWidth = 5;
+                cContext.stroke();
+            }
         }
     }
     Iceshop.Customer = Customer;

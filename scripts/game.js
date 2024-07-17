@@ -7,6 +7,8 @@ var Iceshop;
     var time;
     var gameTimer;
     var cooldown = 500;
+    var posX;
+    var posY;
     var context;
     ////////////////////////////////
     //assigning variables on window load
@@ -33,9 +35,9 @@ var Iceshop;
     ////////////////////////////////
     //Function to render Customer
     ////////////////////////////////
-    function render() {
+    function renderCustomer() {
         let customer = new Iceshop.Customer(0);
-        customer.generateCustomer(context);
+        customer.generateCustomer(context, posX, posY);
     }
     ////////////////////////////////
     //Game Timer function
@@ -50,4 +52,6 @@ var Iceshop;
     ////////////////////////////////
     //Canvas Generator Functions
     ////////////////////////////////
+    function renderCafe() {
+    }
 })(Iceshop || (Iceshop = {}));
