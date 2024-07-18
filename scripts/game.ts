@@ -14,7 +14,9 @@ var posX: number = 2;
 export var width: number;
 
 var context: CanvasRenderingContext2D;
+const image: HTMLImageElement = new Image(80, 80);
 
+image.src = "../media/Stall_Roof.png";
 
 ////////////////////////////////
 //assigning variables on window load
@@ -80,6 +82,43 @@ function msToTime(duration: number) {
 ////////////////////////////////
 function renderCafe() {
 
+    // clear canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+    //draw background
+    //Sky
+    context.beginPath();
+    context.rect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "lightblue";
+    context.fill();
+
+    //Sidewalk
+    context.beginPath();
+    context.rect(0, 0, canvas.width, canvas.height/3);
+    context.fillStyle = "grey";
+    context.fill();
+    
+    // draw cafe
+    //Booth
+    context.beginPath();
+    context.rect(canvas.height/3, canvas.height/3, canvas.width/2, canvas.height/3);
+    context.fillStyle = "brown";
+    context.fill();
+
+    //Roof
+    context.drawImage(image, canvas.width/4, canvas.height/4);
+    
+    //Ice
+    iceCreamFlavours.forEach(icecream => {
+   
+        context.beginPath();
+        context.rect(canvas.width/4, canvas.height/4, canvas.width/2, canvas.height/3); //Abstand muss noch bestimmt werden
+        context.fillStyle = icecream.color;
+        context.fill();  
+    });
+ 
+
+    context.save();
 }
 
 function spawnCustomer() {

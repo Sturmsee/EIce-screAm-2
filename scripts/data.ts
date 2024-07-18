@@ -93,7 +93,7 @@ interface IceCream {
     color: string;
 }
 
-const iceCreamFlavours: IceCream[] = [
+export const iceCreamFlavours: IceCream[] = [
     { name: 'Vanille', description: 'Vanillegeschmack', price: 1.2, color: '#ffffcc'},
     { name: 'Schokolade', description: 'Schokoladengeschmack', price: 1.2, color: '#8b4513'},
     { name: 'Erdbeere', description: 'Erbeergeschmack', price: 1.2, color: '#ee6363'},
