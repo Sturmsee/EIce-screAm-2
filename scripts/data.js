@@ -6,18 +6,18 @@ var Iceshop;
             //this.img = img;
             this.mood = mood;
             this.orderFinished = false;
+            this.spawnTime = performance.now();
         }
         generateOrder() {
-            this.customOrder.ice1 = iceCreamFlavours[Math.floor(Math.random() * iceCreamFlavours.length)];
-            this.customOrder.ice2 = iceCreamFlavours[Math.floor(Math.random() * iceCreamFlavours.length)];
-            this.customOrder.ice3 = iceCreamFlavours[Math.floor(Math.random() * iceCreamFlavours.length)];
+            this.customOrder = new Order(Iceshop.iceCreamFlavours[Math.floor(Math.random() * Iceshop.iceCreamFlavours.length)], Iceshop.iceCreamFlavours[Math.floor(Math.random() * Iceshop.iceCreamFlavours.length)], Iceshop.iceCreamFlavours[Math.floor(Math.random() * Iceshop.iceCreamFlavours.length)]);
             return this.customOrder;
         }
         generateCustomer(cContext, _animateX) {
             let animateX = _animateX;
-            let centerY = 200;
-            let centerX = 200 + animateX;
-            let radius = 200;
+            let centerY = Iceshop.height - (Iceshop.height / 4);
+            let radius = 150;
+            let centerX = -radius / 1.2 + animateX;
+            //let centerX = 200;
             //Draw Face
             cContext.beginPath();
             cContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
@@ -43,18 +43,22 @@ var Iceshop;
             }
             else if (this.mood < 1) {
                 cContext.beginPath();
-                cContext.arc(centerX, centerY - 50, 100, Math.PI, Math.PI * 2, false);
+                cContext.arc(centerX, centerY + radius / 4, 100, Math.PI, Math.PI * 2, false);
                 cContext.lineWidth = 5;
                 cContext.stroke();
             }
             else {
                 cContext.beginPath();
-                cContext.fillRect(centerX - 50, centerY - 50, 100, 20);
+                cContext.fillRect(centerX - 50, centerY + radius / 4, 100, 20);
                 cContext.lineWidth = 5;
                 cContext.stroke();
             }
             if ((centerX >= Iceshop.width / 2) && !this.orderFinished) {
                 animateX = 0;
+                if (performance.now() - this.spawnTime > 5000) {
+                    this.mood -= 1;
+                    this.spawnTime = performance.now();
+                }
             }
             else {
                 animateX = _animateX;
@@ -69,7 +73,8 @@ var Iceshop;
             this.ice3 = ice3;
         }
     }
-    const iceCreamFlavours = [
+    Iceshop.Order = Order;
+    Iceshop.iceCreamFlavours = [
         { name: 'Vanille', description: 'Vanillegeschmack', price: 1.2, color: '#ffffcc' },
         { name: 'Schokolade', description: 'Schokoladengeschmack', price: 1.2, color: '#8b4513' },
         { name: 'Erdbeere', description: 'Erbeergeschmack', price: 1.2, color: '#ee6363' },
