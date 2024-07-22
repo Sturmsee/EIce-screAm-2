@@ -69,11 +69,12 @@ export class Customer {
             cContext.stroke();
         }
 
-        if((centerX >= width / 2) && !this.orderFinished) {
+        if((centerX >= width - width / 5) && !this.orderFinished) {
             animateX = 0;
             if(performance.now() - this.spawnTime  > 5000) {
                 this.mood -= 1;
                 this.spawnTime = performance.now();
+                showCustomerOrder();
             }
         } else {
             animateX = _animateX;
@@ -89,10 +90,10 @@ export class Order{
     ice2: IceCream;
     ice3: IceCream;
 
-    constructor(ice1: IceCream,ice2: IceCream,ice3: IceCream){
-        this.ice1 = ice1;
-        this.ice2 = ice2;
-        this.ice3 = ice3;
+    constructor(_ice1: IceCream,_ice2: IceCream,_ice3: IceCream){
+        this.ice1 = _ice1;
+        this.ice2 = _ice2;
+        this.ice3 = _ice3;
     }
 
 

@@ -53,11 +53,12 @@ var Iceshop;
                 cContext.lineWidth = 5;
                 cContext.stroke();
             }
-            if ((centerX >= Iceshop.width / 2) && !this.orderFinished) {
+            if ((centerX >= Iceshop.width - Iceshop.width / 5) && !this.orderFinished) {
                 animateX = 0;
                 if (performance.now() - this.spawnTime > 5000) {
                     this.mood -= 1;
                     this.spawnTime = performance.now();
+                    Iceshop.showCustomerOrder();
                 }
             }
             else {
@@ -67,10 +68,10 @@ var Iceshop;
     }
     Iceshop.Customer = Customer;
     class Order {
-        constructor(ice1, ice2, ice3) {
-            this.ice1 = ice1;
-            this.ice2 = ice2;
-            this.ice3 = ice3;
+        constructor(_ice1, _ice2, _ice3) {
+            this.ice1 = _ice1;
+            this.ice2 = _ice2;
+            this.ice3 = _ice3;
         }
     }
     Iceshop.Order = Order;

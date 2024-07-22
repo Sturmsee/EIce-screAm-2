@@ -11,25 +11,21 @@ var Iceshop;
     var context;
     const image = new Image();
     const bubble = new Image();
+    const parchment = new Image();
     var storedColor;
     var customerOrders = [];
     var customers = [];
     image.src = "../media/Stall_Roof.png";
     bubble.src = "../media/speech_bubble.png";
+    parchment.src = "../media/order_parchment.png";
+    var order;
     ////////////////////////////////
     //assigning variables on window load
     ////////////////////////////////
     window.onload = () => {
-        canvas = document.querySelector('#canvas');
-        context = canvas.getContext('2d');
+        canvas = document.querySelector("#canvas");
+        context = canvas.getContext("2d");
         canvas.addEventListener("click", onClick, false);
-        /* canvas.addEventListener('mousemove', (event: MouseEvent) => {
-             const rect = canvas.getBoundingClientRect();
-             const mouseX = event.clientX - rect.left;
-             const mouseY = event.clientY - rect.top;
-             const color = getColorAtPosition(mouseX, mouseY);
-             colorInfo.innerText = `${color}`;
-         }); */
         canvas.width = window.innerWidth - window.innerWidth / 4;
         canvas.height = window.innerHeight - window.innerHeight / 4;
         Iceshop.width = canvas.width;
@@ -38,12 +34,10 @@ var Iceshop;
         gameTimer = performance.now();
         console.log("loading...");
         renderCafe();
-        renderCustomer();
-        showCustomerOrder();
-        timerElement = document.querySelector('#timer');
+        timerElement = document.querySelector("#timer");
         timerElement.innerHTML = msToTime(performance.now() - gameTimer);
         console.log(timerElement);
-        //gameLoop();
+        order = new Iceshop.Order({ name: 'empty', description: 'empty', price: 0, color: '#ffffff' }, { name: 'empty', description: 'empty', price: 0, color: '#ffffff' }, { name: 'empty', description: 'empty', price: 0, color: '#ffffff' });
     };
     ////////////////////////////////
     //Cooldown
@@ -54,26 +48,40 @@ var Iceshop;
             return true;
         }
     }
+    Iceshop.customerSpawnTimer = customerSpawnTimer;
     ////////////////////////////////
     //Function to render Customer
     ////////////////////////////////
     function renderCustomer() {
-        let customer = new Iceshop.Customer(2);
-        customer.customOrder = customer.generateOrder();
-        console.log(customer.customOrder);
-        customerOrders.push(customer.customOrder);
-        customer.generateCustomer(context, posX);
+        if (order == customers[0].customOrder) {
+            customers.pop();
+            order = new Iceshop.Order({ name: 'empty', description: 'empty', price: 0, color: '#ffffff' }, { name: 'empty', description: 'empty', price: 0, color: '#ffffff' }, { name: 'empty', description: 'empty', price: 0, color: '#ffffff' });
+            let customer = new Iceshop.Customer(2);
+            customer.customOrder = customer.generateOrder();
+            customers.push(customer);
+            customerOrders.push(customer.customOrder);
+        }
+        //console.log(customer.customOrder);
+        customers[0].generateCustomer(context, posX);
     }
+    Iceshop.renderCustomer = renderCustomer;
     ////////////////////////////////
     //Game Timer function
     ////////////////////////////////
     function msToTime(duration) {
         var milliseconds = Math.floor((duration % 1000) / 100), seconds = Math.floor((duration / 1000) % 60), minutes = Math.floor((duration / (1000 * 60)) % 60), hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-        let hoursString = (hours < 10) ? "0" + hours : hours;
-        let minutesString = (minutes < 10) ? "0" + minutes : minutes;
-        let secondsString = (seconds < 10) ? "0" + seconds : seconds;
-        return hoursString + ":" + minutesString + ":" + secondsString + "." + milliseconds;
+        let hoursString = hours < 10 ? "0" + hours : hours;
+        let minutesString = minutes < 10 ? "0" + minutes : minutes;
+        let secondsString = seconds < 10 ? "0" + seconds : seconds;
+        return (hoursString +
+            ":" +
+            minutesString +
+            ":" +
+            secondsString +
+            "." +
+            milliseconds);
     }
+    Iceshop.msToTime = msToTime;
     ////////////////////////////////
     //Canvas Generator Functions
     ////////////////////////////////
@@ -108,9 +116,11 @@ var Iceshop;
         //Ice
         let count = Iceshop.iceCreamFlavours.length;
         let counter = 0;
-        Iceshop.iceCreamFlavours.forEach(icecream => {
+        Iceshop.iceCreamFlavours.forEach((icecream) => {
             context.beginPath();
-            context.rect((canvas.width - canvas.width / 1.15) + ((canvas.width / 2) / count) * counter, canvas.height / 2.5, (canvas.width / 2.25) / count, canvas.height / 5); //Abstand muss noch bestimmt werden
+            context.rect(canvas.width -
+                canvas.width / 1.15 +
+                (canvas.width / 2 / count) * counter, canvas.height / 2.5, canvas.width / 2.25 / count, canvas.height / 5); //Abstand muss noch bestimmt werden
             context.fillStyle = icecream.color;
             context.fill();
             context.strokeStyle = "black";
@@ -119,26 +129,30 @@ var Iceshop;
         });
         context.save();
     }
+    Iceshop.renderCafe = renderCafe;
     function spawnCustomer() {
         let coinFlip = Math.floor(Math.random());
         if (customerSpawnTimer() && coinFlip > 0) {
             renderCustomer();
         }
     }
+    Iceshop.spawnCustomer = spawnCustomer;
     ////////////////////////////////
     //Game Loop
     ////////////////////////////////
     function gameLoop() {
-        let curserValue;
         let lastTime = 0;
         while (true) {
-            if (performance.now() - lastTime > 100) {
+            /*if (performance.now() - lastTime != 100) {
                 continue;
-            }
-            else {
+            } else {
                 lastTime = performance.now();
-            }
-            console.log("loop");
+            }*/
+            //console.log("loop");
+            context.restore();
+            showCustomerOrder();
+            showWorkingOrder();
+            spawnCustomer();
         }
     }
     ////////////////////////////////
@@ -150,6 +164,7 @@ var Iceshop;
         const mouseY = e.clientY - rect.top;
         storedColor = getColorAtPosition(mouseX, mouseY);
         console.log(`Stored Color: ${storedColor}`);
+        colorToIce(storedColor);
     }
     function getColorAtPosition(x, y) {
         const imageData = context.getImageData(x, y, 1, 1).data;
@@ -159,74 +174,85 @@ var Iceshop;
         const a = imageData[3];
         return rgbaToHex(r, g, b, a);
     }
+    Iceshop.getColorAtPosition = getColorAtPosition;
     function componentToHex(c) {
         const hex = c.toString(16);
-        return hex.length == 1 ? '0' + hex : hex;
+        return hex.length == 1 ? "0" + hex : hex;
     }
+    Iceshop.componentToHex = componentToHex;
     function rgbaToHex(r, g, b, a) {
-        return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}${componentToHex(a)}`;
+        return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
     }
+    Iceshop.rgbaToHex = rgbaToHex;
     ////////////////////////////////
     //Funktion zum Filtern der Farbe
     ////////////////////////////////
     function colorToIce(color) {
-        let ice1;
-        let ice2;
-        let ice3;
-        let order = new Iceshop.Order(ice1, ice2, ice3);
-        Iceshop.iceCreamFlavours.forEach(icecream => {
+        Iceshop.iceCreamFlavours.forEach((icecream) => {
             if (icecream.color == color) {
-                if (ice1 == null) {
-                    ice1 = icecream;
+                if (order.ice1.name == "empty") {
+                    //ice1 = icecream;
                     order.ice1 = icecream;
                 }
-                else if (ice2 == null) {
-                    ice2 = icecream;
+                else if (order.ice2.name == "empty") {
+                    //ice2 = icecream;
                     order.ice2 = icecream;
                 }
-                else if (ice3 == null) {
-                    ice3 = icecream;
+                else if (order.ice3.name == "empty") {
+                    //ice3 = icecream;
                     order.ice3 = icecream;
                 }
                 else {
                     console.log("This ice doesn't exist");
                 }
+                console.log("I am working");
             }
         });
+        console.log(order.ice1.name, order.ice2.name, order.ice3.name);
     }
+    Iceshop.colorToIce = colorToIce;
     ////////////////////////////////
     //Anzeigen der gemachten Bestellung
     ////////////////////////////////
     function showWorkingOrder() {
-        let order = customerOrders[0];
         let posX = Iceshop.width - Iceshop.width / 3;
         let posY = Iceshop.height / 2;
+        console.log(order);
+        context.drawImage(parchment, posX - 100, posY - 200, 250, 350);
         context.beginPath();
-        context.rect(posX - 52, posY - 32, 104, 154);
-        context.fillStyle = "black";
+        context.arc(posX + 25, posY - 70, 20, 0, Math.PI * 2, true);
+        context.fillStyle = order.ice1.color;
         context.fill();
+        context.strokeStyle = "black";
+        context.stroke();
         context.beginPath();
-        context.rect(posX - 50, posY - 30, 100, 150);
-        context.fillStyle = "lightgrey";
+        context.arc(posX + 25, posY - 50, 20, 0, Math.PI * 2, true);
+        context.fillStyle = order.ice2.color;
         context.fill();
+        context.strokeStyle = "black";
+        context.stroke();
         context.beginPath();
-        context.arc(posX, posY, 20, 0, Math.PI * 2, true);
-        context.fillStyle = customerOrders[0].ice1.color;
+        context.arc(posX + 25, posY - 25, 20, 0, Math.PI * 2, true);
+        context.fillStyle = order.ice3.color;
         context.fill();
+        context.strokeStyle = "black";
+        context.stroke();
         context.beginPath();
-        context.arc(posX, posY + 20, 20, 0, Math.PI * 2, true);
-        context.fillStyle = customerOrders[0].ice2.color;
-        context.fill();
-        context.beginPath();
-        context.arc(posX, posY + 45, 20, 0, Math.PI * 2, true);
-        context.fillStyle = customerOrders[0].ice3.color;
+        context.strokeStyle = "black";
+        context.fillStyle = "brown";
+        context.moveTo(posX + 5, posY - 15);
+        context.lineTo(posX + 45, posY - 15);
+        context.lineTo(posX + 25, posY + 70);
+        context.lineTo(posX + 5, posY - 15);
+        context.closePath();
+        context.stroke();
         context.fill();
     }
+    Iceshop.showWorkingOrder = showWorkingOrder;
     ////////////////////////////////
     //Anzeigen der Kundenbestellung
     ////////////////////////////////
     function showCustomerOrder() {
-        let order = customerOrders[0];
         let posX = Iceshop.width - Iceshop.width / 5;
         let posY = Iceshop.height - Iceshop.height / 1.12;
         context.beginPath();
@@ -273,4 +299,5 @@ var Iceshop;
         context.stroke();
         context.fill();
     }
+    Iceshop.showCustomerOrder = showCustomerOrder;
 })(Iceshop || (Iceshop = {}));
